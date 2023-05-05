@@ -6,7 +6,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Security.Claims;
 using Microsoft.EntityFrameworkCore;
-#pragma warning disable CS8602,CS8604
+using Capstonep2.Infrastructure.Domain;
+#pragma warning disable CS8602, CS8604
 
 namespace Capstonep2.Pages
 {
@@ -18,11 +19,29 @@ namespace Capstonep2.Pages
         [BindProperty]
         public ViewModel View { get; set; }
 
+        [BindProperty]
+        public List<IdValuePair>? SelectedCities { get; set; }
+        public List<IdValuePair>? Cities {
+            
+            get
+            {
+                return new List<IdValuePair>() {
+                        new IdValuePair() { Id = Guid.Parse("ab2f5505-74d1-4efd-9d81-dc28cad8620a"), Value = "Olongapo" },
+                        new IdValuePair() { Id = Guid.Parse("ab2f5505-74d1-4efd-9d81-dc28cad8620b"), Value = "Dinalupihan" },
+                        new IdValuePair() { Id = Guid.Parse("ab2f5505-74d1-4efd-9d81-dc28cad8620c"), Value = "Subic" },
+                        new IdValuePair() { Id = Guid.Parse("ab2f5505-74d1-4efd-9d81-dc28cad8620d"), Value = "Castillejos" },
+                        new IdValuePair() { Id = Guid.Parse("ab2f5505-74d1-4efd-9d81-dc28cad8620e"), Value = "San Antonio" },
+                        new IdValuePair() { Id = Guid.Parse("ab2f5505-74d1-4efd-9d81-dc28cad8620f"), Value = "San Marcelino" },
+                };
+            }  
+        }
+
         public IndexModel(DefaultDBContext context, ILogger<Index> logger)
         {
             _logger = logger;
             _context = context;
             View = View ?? new ViewModel();
+            SelectedCities = SelectedCities ?? new List<IdValuePair>() { new IdValuePair() { Id = Guid.Parse("ab2f5505-74d1-4efd-9d81-dc28cad8620b"), Value = "Dinalupihan"} };
         }
 
         public void OnGet()
@@ -139,10 +158,28 @@ namespace Capstonep2.Pages
             return Page();
         }
 
+        [HttpGet("cities")]
+        public JsonResult? OnGetCities(int pageIndex = 1, string? keyword = "", int pageSize = 10)
+        {
+            return new JsonResult(Cities!.Select(a => new LookupDto.Result()
+            {
+                Id = a.Id.ToString(),
+                Text = a.Value ?? ""
+            })
+            .AsQueryable()            
+            .GetLookupPaged(pageIndex, pageSize));
+        }
+
         public class ViewModel
         {
             public string? Email { get; set; }
             public string? Password { get; set; }
+        }
+
+        public class IdValuePair
+        {
+            public Guid? Id { get; set; }
+            public string? Value { get; set; }
         }
     }
 }

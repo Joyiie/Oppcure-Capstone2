@@ -38,3 +38,40 @@
         </div>
     </div>
 </div>
+
+<div class="row">
+    <div class="card">
+        <div class="card-body">
+            <select class="form-control selectCities" name="View.SelectedCities" multiple>
+                @{
+                    if (Model.SelectedCities != null && Model.SelectedCities.Count() > 0)
+                    {
+                        foreach (var city in Model.SelectedCities)
+                        {
+                            <option selected value="@city.Id">@city.Value</option>
+                        }
+                    }
+                }
+            </select>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts{
+<script>
+    $('.selectCities').select2({
+        ajax: {
+                url: '?handler=cities',
+            data: function (params) {
+                var query = {
+                    keyword: params.term,
+                    page: params.page || 1
+                }
+                return query;
+            },
+            headers: { "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val() },
+        }
+    });
+</script>
+}
