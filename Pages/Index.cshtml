@@ -22,13 +22,26 @@
                             <label asp-for="View.Password">Password</label>
                             <input type="password" class="form-control" placeholder="Enter password" asp-for="View.Password">
                         </div>
+                        <div class="row align-content-center justify-content-center">
+                            <select class="form-control selectCities" name="View.SelectedCities" multiple>
+                                @{
+                                    if (Model.SelectedCities != null && Model.SelectedCities.Count() > 0)
+                                    {
+                                        foreach (var city in Model.SelectedCities)
+                                        {
+                                            <option selected value="@city.Id">@city.Value</option>
+                                        }
+                                    }
+                                }
+                            </select>
+                        </div>
                         <div class="form-group alert-danger">
                             @Html.ValidationSummary()
                         </div>
                         <div class="row align-content-center justify-content-center">
                             <button type="submit" class=" col-5 btn btn-info border border-light justify-content-center">Log in</button>
                         </div>
-                        
+
                         <div class="row align-content-center justify-content-center">
                             <p class="justify-content-center">Don't Have an account? <a href="~/manage/Account/SignUp" class="justify-content-center ">Sign Up</a></p>
                         </div>
@@ -39,23 +52,6 @@
     </div>
 </div>
 
-<div class="row">
-    <div class="card">
-        <div class="card-body">
-            <select class="form-control selectCities" name="View.SelectedCities" multiple>
-                @{
-                    if (Model.SelectedCities != null && Model.SelectedCities.Count() > 0)
-                    {
-                        foreach (var city in Model.SelectedCities)
-                        {
-                            <option selected value="@city.Id">@city.Value</option>
-                        }
-                    }
-                }
-            </select>
-        </div>
-    </div>
-</div>
 
 
 @section Scripts{

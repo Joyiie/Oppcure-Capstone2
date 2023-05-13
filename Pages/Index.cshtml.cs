@@ -174,6 +174,8 @@ namespace Capstonep2.Pages
         {
             public string? Email { get; set; }
             public string? Password { get; set; }
+
+            public List<Guid>? SelectedCities { get; set; }
         }
 
         public class IdValuePair
