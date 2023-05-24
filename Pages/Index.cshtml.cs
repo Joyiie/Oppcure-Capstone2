@@ -22,7 +22,7 @@ namespace Capstonep2.Pages
         [BindProperty]
         public List<IdValuePair>? SelectedCities { get; set; }
         public List<IdValuePair>? Cities {
-            
+
             get
             {
                 return new List<IdValuePair>() {
@@ -33,7 +33,7 @@ namespace Capstonep2.Pages
                         new IdValuePair() { Id = Guid.Parse("ab2f5505-74d1-4efd-9d81-dc28cad8620e"), Value = "San Antonio" },
                         new IdValuePair() { Id = Guid.Parse("ab2f5505-74d1-4efd-9d81-dc28cad8620f"), Value = "San Marcelino" },
                 };
-            }  
+            }
         }
 
         public IndexModel(DefaultDBContext context, ILogger<Index> logger)
@@ -41,7 +41,7 @@ namespace Capstonep2.Pages
             _logger = logger;
             _context = context;
             View = View ?? new ViewModel();
-            SelectedCities = SelectedCities ?? new List<IdValuePair>() { new IdValuePair() { Id = Guid.Parse("ab2f5505-74d1-4efd-9d81-dc28cad8620b"), Value = "Dinalupihan"} };
+            SelectedCities = SelectedCities ?? new List<IdValuePair>() { new IdValuePair() { Id = Guid.Parse("ab2f5505-74d1-4efd-9d81-dc28cad8620b"), Value = "Dinalupihan" } };
         }
 
         public void OnGet()
@@ -166,7 +166,7 @@ namespace Capstonep2.Pages
                 Id = a.Id.ToString(),
                 Text = a.Value ?? ""
             })
-            .AsQueryable()            
+            .AsQueryable()
             .GetLookupPaged(pageIndex, pageSize));
         }
 
@@ -175,7 +175,14 @@ namespace Capstonep2.Pages
             public string? Email { get; set; }
             public string? Password { get; set; }
 
-            public List<Guid>? SelectedCities { get; set; }
+            public List<SelectedCity>? SelectedCities { get; set; }
+        }
+
+        public class SelectedCity
+        {
+            public Guid? Id { get; set; }
+            public string? Name { get; set; }
+            public string? Description { get; set; }
         }
 
         public class IdValuePair

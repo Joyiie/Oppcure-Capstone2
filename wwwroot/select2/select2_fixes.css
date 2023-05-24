@@ -1,0 +1,36 @@
+﻿.select2 {
+    border: 0;
+}
+
+.select2-container {
+    z-index: 100000;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__rendered {
+    line-height: 18px !important
+}
+
+.select2-container .select2-selection--single {
+    height: auto !important
+}
+
+.select2-container--default .select2-selection--single .select2-selection__rendered {
+    color: #044274
+}
+
+ .select2-container--default .select2-selection--single .select2-selection__arrow {
+    margin-left: 5px
+}
+
+.select2-selection {
+    border: 0px solid #fff !important;
+    height: 0px !important
+}
+
+.select2-container .select2-selection--single {
+    padding: 5px 10px !important
+}
+
+.select2-selection__arrow {
+    display: none !important
+}

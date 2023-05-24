@@ -22,18 +22,23 @@
                             <label asp-for="View.Password">Password</label>
                             <input type="password" class="form-control" placeholder="Enter password" asp-for="View.Password">
                         </div>
+                        <div class="form-group">
+                            <label>Cities</label>
+                            <input type="button" onclick="confirmAddCity()" class="btn btn-info" value="Add City"/>
+                        </div>
                         <div class="row align-content-center justify-content-center">
-                            <select class="form-control selectCities" name="View.SelectedCities" multiple>
-                                @{
-                                    if (Model.SelectedCities != null && Model.SelectedCities.Count() > 0)
-                                    {
-                                        foreach (var city in Model.SelectedCities)
-                                        {
-                                            <option selected value="@city.Id">@city.Value</option>
-                                        }
-                                    }
-                                }
-                            </select>
+                            <table >
+                                <thead>
+                                    <tr>
+                                        <th>Id</th>
+                                        <th>Name</th>
+                                        <th>Description</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="selectedCities">
+
+                                </tbody>
+                            </table>
                         </div>
                         <div class="form-group alert-danger">
                             @Html.ValidationSummary()
@@ -52,22 +57,85 @@
     </div>
 </div>
 
+<div class="modal fade" id="add-city-modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content bg-mustardlite">
+            <div class="modal-header">
+                <h5 class="modal-title">Add City</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" />
+            </div>
+            <div class="form">
+                <div class="modal-body bg-mustardlite">
+                    <div class="col-auto ">
+                        <div class="form-group">
+                            <label>City</label>
+                            <select id="add-city-modal-select" class="form-control selectCity">
+
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Description</label>
+                            <textarea id="add-city-modal-description" class="form-control"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <button type="button" class="btn btn-primary" onclick="addCity()">Add</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 
 @section Scripts{
 <script>
-    $('.selectCities').select2({
-        ajax: {
+    function confirmAddCity(){
+        $("#add-city-modal").modal("show");
+        $('#add-city-modal-description').val("");
+        $('.selectCity').select2({
+            ajax: {
                 url: '?handler=cities',
-            data: function (params) {
-                var query = {
-                    keyword: params.term,
-                    page: params.page || 1
-                }
-                return query;
-            },
-            headers: { "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val() },
-        }
-    });
+                data: function (params) {
+                    var query = {
+                        keyword: params.term,
+                        page: params.page || 1
+                    }
+                    return query;
+                },
+                dropdownParent: $("#add-city-modal"),
+                headers: { "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val() },
+            }
+        });
+    }
+
+    function addCity(){
+            var temp = `<tr>
+                            <td>[id]<input type="hidden" name="View.SelectedCities[x].Id" value="[id]"/></td>
+                            <td>[name]<input type="hidden" name="View.SelectedCities[x].Name" value="[name]"/></td>
+                            <td>[desc]<input type="hidden" name="View.SelectedCities[x].Description" value="[desc]"/></td>
+                        </tr>`;
+
+            var selectedCity = $('#add-city-modal-select').select2('data');
+            if (selectedCity) {
+                var ctr = $("#selectedCities > tr").length;
+                $("#selectedCities").append(temp
+                    .replace("[id]", $('#add-city-modal-select').val())
+                    .replace("[id]", $('#add-city-modal-select').val())
+                    .replace("[name]", selectedCity[0].text)
+                    .replace("[name]", selectedCity[0].text)
+                    .replace("[desc]", $('#add-city-modal-description').val())
+                    .replace("[desc]", $('#add-city-modal-description').val())
+                    .replace("x", ctr)
+                    .replace("x", ctr)
+                    .replace("x", ctr)
+                );
+            }
+
+            $('#add-city-modal-description').val("");
+            $("#add-city-modal").modal("hide");
+
+    }
 </script>
 }
